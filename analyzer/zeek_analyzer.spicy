@@ -2,8 +2,7 @@
 
 module Zeek_DHCP;
 
-import DHCP from protocols;
-# import DHCP;
+import DHCP;
 import zeek;
 
 on DHCP::Message::%done {
