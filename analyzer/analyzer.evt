@@ -8,4 +8,29 @@ protocol analyzer spicy::DHCP over UDP:
 
 import Zeek_DHCP;
 
+
+########## EVENTS ##########
+
+# Generic DHCP message
 on DHCP::Message -> event dhcp_message($conn, $is_orig, Zeek_DHCP::create_msg(self), Zeek_DHCP::create_options(self));
+
+# DHCP Discover message
+on DHCP::Message if ( DHCP::dhcp_type == DHCP::MessageType::DISCOVER ) -> event dhcp_discover($conn, $is_orig, Zeek_DHCP::create_msg(self), Zeek_DHCP::create_options(self));
+
+# DHCP Offer message
+on DHCP::Message if ( DHCP::dhcp_type == DHCP::MessageType::OFFER ) -> event dhcp_offer($conn, $is_orig, Zeek_DHCP::create_msg(self), Zeek_DHCP::create_options(self));
+
+# DHCP Request message
+on DHCP::Message if ( DHCP::dhcp_type == DHCP::MessageType::REQUEST ) -> event dhcp_request($conn, $is_orig, Zeek_DHCP::create_msg(self), Zeek_DHCP::create_options(self));
+
+# DHCP Decline message
+on DHCP::Message if ( DHCP::dhcp_type == DHCP::MessageType::DECLINE ) -> event dhcp_decline($conn, $is_orig, Zeek_DHCP::create_msg(self), Zeek_DHCP::create_options(self));
+
+# DHCP Ack message
+on DHCP::Message if ( DHCP::dhcp_type == DHCP::MessageType::ACK ) -> event dhcp_ack($conn, $is_orig, Zeek_DHCP::create_msg(self), Zeek_DHCP::create_options(self));
+
+# DHCP Nak message
+on DHCP::Message if ( DHCP::dhcp_type == DHCP::MessageType::NAK ) -> event dhcp_nak($conn, $is_orig, Zeek_DHCP::create_msg(self), Zeek_DHCP::create_options(self));
+
+# DHCP Release message
+on DHCP::Message if ( DHCP::dhcp_type == DHCP::MessageType::RELEASE ) -> event dhcp_release($conn, $is_orig, Zeek_DHCP::create_msg(self), Zeek_DHCP::create_options(self));
