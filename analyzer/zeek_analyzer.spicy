@@ -213,7 +213,7 @@ public function create_msg(msg: DHCP::Message):
         file_n: optional<string>> {
     return (
         cast<uint32>(msg.op),
-        cast<uint32>(msg.htype),
+        cast<uint32>(DHCP::dhcp_type),
         msg.xid,
         cast<interval>(msg.secs),
         cast<uint32>(msg.flags),
