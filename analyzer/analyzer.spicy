@@ -2,11 +2,6 @@
 
 module DHCP;
 
-import spicy;
-
-# Size (in bytes) of a MAC address
-global MAC_ADDR_SIZE: uint8 = 6;
-
 # RFC-2131: DHCP message, Table 1.
 public type Message = unit {
     op: uint8 &convert=Opcode($$);
@@ -26,20 +21,19 @@ public type Message = unit {
     options: Options;
 
     # Correct encoding for chaddr
-    var chaddr_iter: iterator<bytes>;
-    var chaddr_str: string = "";
+    var chaddr_iter: iterator<bytes>;  # Iterator on chaddr
+    var chaddr_str: string = "";  # Accumulator string for chaddr correct encoding
     var i: uint8 = 0;
     on chaddr {
         self.chaddr_iter = begin($$);
-        # TODO: use chaddr size given in message
-        while ( self.i < MAC_ADDR_SIZE ) {
+        # Iterate up to hlen, the hardware address length given in the message
+        while ( self.i < self.hlen ) {
             if ( self.i > 0 ) {
                 self.chaddr_str = self.chaddr_str + ":";
             }
-            self.chaddr_str = self.chaddr_str + ("%02x" % *(++self.chaddr_iter));
+            self.chaddr_str = self.chaddr_str + ("%02x" % *(self.chaddr_iter++));
             ++self.i;
         }
-        print self.chaddr_str;
     }
     
 };
