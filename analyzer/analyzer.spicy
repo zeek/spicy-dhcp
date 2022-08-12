@@ -19,6 +19,23 @@ public type Message = unit {
     sname: bytes &size=64 &convert=$$.split1(b"\0")[0].decode();
     file_n: bytes &size=128 &convert=$$.split1(b"\0")[0].decode();
     options: Options;
+
+    # Correct encoding for chaddr, the client hardware address
+    var chaddr_str: string;
+    on chaddr {
+        # TODO(bbannier): Perform this conversion on the fly as part of parsing
+        # `chaddr` once https://github.com/zeek/spicy/issues/1261 is fixed.
+
+        # Iterate up to hlen, the hardware address length given in the message
+        local i = 0;
+        while ( i < self.hlen ) {
+            if ( i > 0 ) {
+                self.chaddr_str = self.chaddr_str + ":";
+            }
+            self.chaddr_str = self.chaddr_str + ("%02x" % *self.chaddr.at(i));
+            ++i;
+        }
+    }
 };
 
 # RFC-2131: DHCP message, Table 1, op.
