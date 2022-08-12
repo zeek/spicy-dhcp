@@ -1,0 +1,5 @@
+.vscode
+*.log
+*.hlto
+tests/.tmp
+tests/.btest.failed.dat
