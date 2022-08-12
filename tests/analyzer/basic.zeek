@@ -7,3 +7,8 @@
 # @TEST-DOC: Test DHCP analyzer with small trace.
 
 @load analyzer
+
+event dhcp_message(c: connection, is_orig: bool, msg: DHCP::Msg, options: DHCP::Options)
+    {
+    print msg$chaddr;
+    }

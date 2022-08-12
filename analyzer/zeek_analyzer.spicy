@@ -221,7 +221,7 @@ public function create_msg(msg: DHCP::Message):
         msg.yiaddr,
         msg.siaddr,
         msg.giaddr,
-        msg.chaddr.decode(hilti::Charset::ASCII),
+        msg.chaddr_str,
         msg.sname,
         msg.file_n
     );
