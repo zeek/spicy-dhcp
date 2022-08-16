@@ -2,9 +2,6 @@
 
 module DHCP;
 
-# Global variable containing the DHCP message type of the currently parsed message
-public global dhcp_type: MessageType;
-
 # RFC-2131: DHCP message, Table 1.
 public type Message = unit {
     op: uint8 &convert=Opcode($$);
@@ -129,7 +126,7 @@ type Option = unit {
         }
         OptionCode::MESSAGE_TYPE -> {
             : uint8;
-            message_type: uint8 &convert=MessageType($$)  { dhcp_type = $$; }
+            message_type: uint8 &convert=MessageType($$);
         }
         OptionCode::SERVER_IDENTIFIER -> {
             : uint8;
