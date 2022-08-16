@@ -20,6 +20,7 @@ public type Message = unit {
     file_n: bytes &size=128 &convert=$$.split1(b"\0")[0].decode();
     options: Options;
 
+    # Correct encoding for chaddr, the client hardware address
     var chaddr_str: string;
     on chaddr {
         # TODO(bbannier): Perform this conversion on the fly as part of parsing
