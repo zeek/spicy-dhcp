@@ -213,7 +213,7 @@ public function create_msg(msg: DHCP::Message):
         file_n: optional<string>> {
     return (
         cast<uint32>(msg.op),
-        cast<uint32>(DHCP::dhcp_type),
+        cast<uint32>(msg.htype),
         msg.xid,
         cast<interval>(msg.secs),
         cast<uint32>(msg.flags),
@@ -221,7 +221,7 @@ public function create_msg(msg: DHCP::Message):
         msg.yiaddr,
         msg.siaddr,
         msg.giaddr,
-        msg.chaddr_str,
+        msg.chaddr.decode(hilti::Charset::ASCII),
         msg.sname,
         msg.file_n
     );
