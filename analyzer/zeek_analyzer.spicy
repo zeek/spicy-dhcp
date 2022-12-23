@@ -85,7 +85,7 @@ public function create_options(msg: DHCP::Message):
         if (option?.request_values) {
             local values: vector<uint32>;
 
-            for (value in values)
+            for (value in option.request_values)
                 values.push_back(cast<uint32>(value));
 
             param_list = values;
