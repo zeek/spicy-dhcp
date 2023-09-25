@@ -2,6 +2,7 @@
 
 # @TEST-EXEC: zeek -r ${TRACES}/dhcp.pcap %INPUT > basic.out
 # @TEST-EXEC: btest-diff basic.out
+# @TEST-EXEC: zeek-cut -C ts uid id.orig_h id.orig_p id.resp_h id.resp_p proto service history <conn.log >conn.log2 && mv conn.log2 conn.log
 # @TEST-EXEC: btest-diff conn.log
 # @TEST-EXEC: btest-diff dhcp.log
 #
