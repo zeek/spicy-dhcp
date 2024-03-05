@@ -3,6 +3,7 @@
 module Zeek_DHCP;
 
 import DHCP;
+import spicy;
 import zeek;
 
 on DHCP::Message::%done {
@@ -161,7 +162,7 @@ public function create_options(msg: DHCP::Message):
             class_identifier = option.class_identifier;
 
         if (option?.user_class)
-            user_class = option.user_class.decode(hilti::Charset::ASCII);
+            user_class = option.user_class.decode(spicy::Charset::ASCII);
     }
 
     return (

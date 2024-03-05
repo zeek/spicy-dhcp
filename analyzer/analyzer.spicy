@@ -2,6 +2,8 @@
 
 module DHCP;
 
+import spicy;
+
 # RFC-2131: DHCP message, Table 1.
 public type Message = unit {
     op: uint8 &convert=Opcode($$);
@@ -138,7 +140,7 @@ type Option = unit {
         }
         OptionCode::MESSAGE -> {
             len : uint8;
-            message: bytes &size=self.len &convert=$$.decode(hilti::Charset::ASCII);
+            message: bytes &size=self.len &convert=$$.decode(spicy::Charset::ASCII);
         }
         OptionCode::MAXIMUM_DHCP_MESSAGE_SIZE -> {
             : uint8;
