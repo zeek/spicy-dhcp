@@ -2,8 +2,6 @@
 
 protocol analyzer spicy::DHCP over UDP:
     parse with DHCP::Message,
-    port 67/udp,
-    port 68/udp,
     replaces DHCP;
 
 import Zeek_DHCP;
