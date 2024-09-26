@@ -43,7 +43,7 @@ function chaddr_bytes_to_string(chaddr: bytes, hlen: uint8): string {
 # RFC-2131: DHCP message, Table 1, op.
 type Opcode = enum {
     BOOTREQUEST = 0x01,
-    BOOTREPLY = 0x02
+    BOOTREPLY = 0x02,
 };
 
 # RFC-1700: Adress Resolution Protocol Parameters, Hardware Type.
@@ -56,7 +56,7 @@ type HardwareType = enum {
     IEEE_802_NETWORKS = 0x06,
     ARCNET = 0x07,
     HYPERCHANNEL = 0x08,
-    LANSTAR = 0x09
+    LANSTAR = 0x09,
 };
 
 # RFC-1497: BOOTP Vendor Information Format.
@@ -68,27 +68,28 @@ type Options = unit {
 # RFC-1533: DHCP Options.
 type Option = unit {
     code: uint8 &convert=OptionCode($$);
-    switch ( self.code ) {
-        OptionCode::PAD, OptionCode::END -> : void {}
+    switch (self.code) {
+        OptionCode::PAD,
+        OptionCode::END -> : void {}
         OptionCode::TIME_OFFSET -> {
             : skip uint8;
             time_offset: int32;
         }
         OptionCode::ROUTER -> {
             len: uint8;
-            routers: (addr &ipv4)[self.len/4] ; # `len` is always a multiple of 4.
+            routers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
         }
         OptionCode::TIME_SERVER -> {
             len: uint8;
-            time_servers: (addr &ipv4)[self.len/4] ; # `len` is always a multiple of 4.
+            time_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
         }
         OptionCode::NAME_SERVER -> {
             len: uint8;
-            name_servers: (addr &ipv4)[self.len/4] ; # `len` is always a multiple of 4.
+            name_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
         }
         OptionCode::DOMAIN_NAME_SERVER -> {
             len: uint8;
-            domain_name_servers: (addr &ipv4)[self.len/4] ; # `len` is always a multiple of 4.
+            domain_name_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
         }
         OptionCode::HOST_NAME -> {
             len: uint8;
@@ -108,15 +109,15 @@ type Option = unit {
         }
         OptionCode::NETWORK_TIME_PROTOCOL_SERVER -> {
             len: uint8;
-            network_time_protocol_servers: (addr &ipv4)[self.len/4]; # `len` is always a multiple of 4.
+            network_time_protocol_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
         }
         OptionCode::VENDOR_SPECIFIC_INFORMATION -> {
-            len : uint8;
+            len: uint8;
             vendor_specific_information: bytes &size=self.len &convert=$$.decode();
         }
         OptionCode::NETBIOS_OVER_TCPIP_NAME_SERVER -> {
             len: uint8;
-            netbios_over_tcpip_name_servers: (addr &ipv4)[self.len/4] ; # `len` is always a multiple of 4.
+            netbios_over_tcpip_name_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
         }
         OptionCode::REQUESTED_ADDRESS -> {
             : skip uint8;
@@ -139,7 +140,7 @@ type Option = unit {
             request_values: uint8[self.len] &convert=[OptionCode(x) for x in $$];
         }
         OptionCode::MESSAGE -> {
-            len : uint8;
+            len: uint8;
             message: bytes &size=self.len &convert=$$.decode(spicy::Charset::ASCII);
         }
         OptionCode::MAXIMUM_DHCP_MESSAGE_SIZE -> {
@@ -165,7 +166,7 @@ type Option = unit {
         }
         OptionCode::USER_CLASS -> {
             len: uint8;
-            user_class:bytes &size=self.len;
+            user_class: bytes &size=self.len;
         }
         * -> : UnparsedOption(self.code);
     };
@@ -173,7 +174,7 @@ type Option = unit {
 
 type OptionCode = enum {
     PAD = 0,
-    SUBNET_MASK = 1,         # TODO(bbannier): implement handling, see https://tools.ietf.org/html/rfc950.
+    SUBNET_MASK = 1, # TODO(bbannier): implement handling, see https://tools.ietf.org/html/rfc950.
     TIME_OFFSET = 2,
     ROUTER = 3,
     TIME_SERVER = 4,
@@ -198,20 +199,20 @@ type OptionCode = enum {
     CLASS_IDENTIFIER = 60,
     CLIENT_IDENTIFIER = 61,
     USER_CLASS = 77,
-    END = 255
+    END = 255,
 };
 
 type MessageType = enum {
     DISCOVER = 0x01,
-    OFFER    = 0x02,
-    REQUEST  = 0x03,
-    DECLINE  = 0x04,
-    ACK      = 0x05,
-    NAK      = 0x06,
-    RELEASE  = 0x07
+    OFFER = 0x02,
+    REQUEST = 0x03,
+    DECLINE = 0x04,
+    ACK = 0x05,
+    NAK = 0x06,
+    RELEASE = 0x07,
 };
 
 type UnparsedOption = unit(code: OptionCode) {
-    len: uint8 if ( code != OptionCode::PAD && code != OptionCode::END );
-    data: bytes &size=self.len if ( code != OptionCode::PAD && code != OptionCode::END );
+    len: uint8 if(code != OptionCode::PAD && code != OptionCode::END);
+    data: bytes &size=self.len if(code != OptionCode::PAD && code != OptionCode::END);
 };
