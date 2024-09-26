@@ -76,20 +76,21 @@ type Option = unit {
             time_offset: int32;
         }
         OptionCode::ROUTER -> {
-            len: uint8;
-            routers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
+            len: uint8 &requires=($$ % 4 == 0); # `len` is always a multiple of 4.
+            routers: (addr &ipv4)[self.len / 4];
         }
         OptionCode::TIME_SERVER -> {
-            len: uint8;
-            time_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
+            len: uint8 &requires=($$ % 4 == 0); # `len` is always a multiple of 4.
+            time_servers: (addr &ipv4)[self.len / 4];
         }
         OptionCode::NAME_SERVER -> {
             len: uint8;
-            name_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
+            len: uint8 &requires=($$ % 4 == 0); # `len` is always a multiple of 4.
+            name_servers: (addr &ipv4)[self.len / 4];
         }
         OptionCode::DOMAIN_NAME_SERVER -> {
-            len: uint8;
-            domain_name_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
+            len: uint8 &requires=($$ % 4 == 0); # `len` is always a multiple of 4.
+            domain_name_servers: (addr &ipv4)[self.len / 4];
         }
         OptionCode::HOST_NAME -> {
             len: uint8;
@@ -108,16 +109,16 @@ type Option = unit {
             broadcast_address: addr &ipv4;
         }
         OptionCode::NETWORK_TIME_PROTOCOL_SERVER -> {
-            len: uint8;
-            network_time_protocol_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
+            len: uint8 &requires=($$ % 4 == 0); # `len` is always a multiple of 4.
+            network_time_protocol_servers: (addr &ipv4)[self.len / 4];
         }
         OptionCode::VENDOR_SPECIFIC_INFORMATION -> {
             len: uint8;
             vendor_specific_information: bytes &size=self.len &convert=$$.decode();
         }
         OptionCode::NETBIOS_OVER_TCPIP_NAME_SERVER -> {
-            len: uint8;
-            netbios_over_tcpip_name_servers: (addr &ipv4)[self.len / 4]; # `len` is always a multiple of 4.
+            len: uint8 &requires=($$ % 4 == 0); # `len` is always a multiple of 4.
+            netbios_over_tcpip_name_servers:(addr &ipv4)[self.len / 4];
         }
         OptionCode::REQUESTED_ADDRESS -> {
             : skip uint8;
@@ -160,7 +161,7 @@ type Option = unit {
             class_identifier: bytes &size=self.len &convert=$$.decode();
         }
         OptionCode::CLIENT_IDENTIFIER -> {
-            len: uint8;
+            len: uint8 &requires=$$>0;
             client_type: uint8 &convert=HardwareType($$);
             client_identifier: bytes &size=(self.len - 1);
         }
