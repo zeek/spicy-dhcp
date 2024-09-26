@@ -63,7 +63,7 @@ type HardwareType = enum {
 type Options = unit {
     : b"\x63\x82\x53\x63"; # Magic Cookie.
     options: Option[];
-};
+} &convert=self.options;
 
 # RFC-1533: DHCP Options.
 type Option = unit {

@@ -53,7 +53,7 @@ public function create_options(msg: DHCP::Message):
         time_servers: optional<vector<addr>>,
         name_servers: optional<vector<addr>>,
         ntp_servers: optional<vector<addr>>> {
-    local options = [cast<uint32>(option.code) for option in msg.options.options];
+    local options = [cast<uint32>(option.code) for option in msg.options];
 
     local requested_address: optional<addr>;
     local param_list: optional<vector<uint32>>;
@@ -79,7 +79,7 @@ public function create_options(msg: DHCP::Message):
     local class_identifier: optional<string>;
     local user_class: optional<string>;
 
-    for (option in msg.options.options) {
+    for (option in msg.options) {
         if (option?.requested_address)
             requested_address = option.requested_address;
 
@@ -215,7 +215,7 @@ public function create_msg(msg: DHCP::Message):
 
     # Retrieve DHCP message type from options
     local m_type: DHCP::MessageType;
-    for (option in msg.options.options) {
+    for (option in msg.options) {
         if (option?.message_type) {
             m_type = option.message_type;
             break; # Found Message Type option, stop loop
