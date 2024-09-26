@@ -216,9 +216,10 @@ public function create_msg(msg: DHCP::Message):
     # Retrieve DHCP message type from options
     local m_type: DHCP::MessageType;
     for (option in msg.options.options) {
-        if (option?.message_type)
+        if (option?.message_type) {
             m_type = option.message_type;
-            break;  # Found Message Type option, stop loop
+            break; # Found Message Type option, stop loop
+        }
     }
 
     return (
