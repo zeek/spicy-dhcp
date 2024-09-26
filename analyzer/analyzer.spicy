@@ -61,7 +61,7 @@ type HardwareType = enum {
 
 # RFC-1497: BOOTP Vendor Information Format.
 type Options = unit {
-    : b"\x63\x82\x53\x63"; # Magic Cookie.
+    : skip b"\x63\x82\x53\x63"; # Magic Cookie.
     options: Option[];
 } &convert=self.options;
 
@@ -71,7 +71,7 @@ type Option = unit {
     switch ( self.code ) {
         OptionCode::PAD, OptionCode::END -> : void {}
         OptionCode::TIME_OFFSET -> {
-            : uint8;
+            : skip uint8;
             time_offset: int32;
         }
         OptionCode::ROUTER -> {
@@ -99,11 +99,11 @@ type Option = unit {
             domain_name: bytes &size=self.len &convert=$$.decode();
         }
         OptionCode::FORWARDING -> {
-            : uint8;
+            : skip uint8;
             forwarding: uint8;
         }
         OptionCode::BROADCAST_ADDRESS -> {
-            : uint8;
+            : skip uint8;
             broadcast_address: addr &ipv4;
         }
         OptionCode::NETWORK_TIME_PROTOCOL_SERVER -> {
@@ -119,19 +119,19 @@ type Option = unit {
             netbios_over_tcpip_name_servers: (addr &ipv4)[self.len/4] ; # `len` is always a multiple of 4.
         }
         OptionCode::REQUESTED_ADDRESS -> {
-            : uint8;
+            : skip uint8;
             requested_address: addr &ipv4;
         }
         OptionCode::IP_ADDRESS_LEASE_TIME -> {
-            : uint8;
+            : skip uint8;
             ip_address_lease_time: uint32;
         }
         OptionCode::MESSAGE_TYPE -> {
-            : uint8;
+            : skip uint8;
             message_type: uint8 &convert=MessageType($$);
         }
         OptionCode::SERVER_IDENTIFIER -> {
-            : uint8;
+            : skip uint8;
             server_identifier: addr &ipv4;
         }
         OptionCode::PARAMETER_REQUESTS -> {
@@ -143,15 +143,15 @@ type Option = unit {
             message: bytes &size=self.len &convert=$$.decode(spicy::Charset::ASCII);
         }
         OptionCode::MAXIMUM_DHCP_MESSAGE_SIZE -> {
-            : uint8;
+            : skip uint8;
             maximum_dhcp_message_size: uint16;
         }
         OptionCode::RENEWAL_TIME_VALUE -> {
-            : uint8;
+            : skip uint8;
             renewal_time_value: uint32;
         }
         OptionCode::REBIND_TIME_VALUE -> {
-            : uint8;
+            : skip uint8;
             rebind_time_value: uint32;
         }
         OptionCode::CLASS_IDENTIFIER -> {
